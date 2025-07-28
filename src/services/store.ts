@@ -23,7 +23,7 @@ const rootReducer = combineSlices({
   auth: authReducer,
   user: userReducer,
   password: passwordReducer,
-  constructor: constructorReducer
+  burgerConstructor: constructorReducer
 });
 
 const store = configureStore({
