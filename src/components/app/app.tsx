@@ -21,12 +21,7 @@ import { fetchIngredients } from '../../services/slices/ingredients';
 const App = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const dispatch = useDispatch();
   const backgroundLocation = location.state?.backgroundLocation;
-
-  useEffect(() => {
-    dispatch(fetchIngredients());
-  }, [dispatch]);
 
   const handleModalClose = () => {
     navigate(-1);
@@ -37,7 +32,7 @@ const App = () => {
       <AppHeader />
       <Routes location={backgroundLocation || location}>
         <Route path='/' element={<ConstructorPage />} />
-        <Route path='ingredients/:id' element={<ConstructorPage />} />
+        <Route path='/ingredients/:id' element={<IngredientDetails />} />
         <Route path='/feed' element={<Feed />} />
         <Route path='/feed/:number' element={<Feed />} />
         <Route path='/login' element={<Login />} />
