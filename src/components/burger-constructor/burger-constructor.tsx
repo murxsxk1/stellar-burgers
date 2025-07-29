@@ -4,8 +4,8 @@ import { BurgerConstructorUI } from '@ui';
 import { RootState, useDispatch } from '../../services/store';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { clearOrder, createOrder } from '../../slices/newOrder';
-import { clearConstructor } from '../../slices/constructor';
+import { clearConstructor } from '../../services/slices/constructor';
+import { createOrder, clearOrder } from '../../services/slices/newOrder';
 
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();

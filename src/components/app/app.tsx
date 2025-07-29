@@ -16,7 +16,7 @@ import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from '../../services/store';
 import { useEffect } from 'react';
-import { fetchIngredients } from '../../slices/ingredients';
+import { fetchIngredients } from '../../services/slices/ingredients';
 
 const App = () => {
   const navigate = useNavigate();
