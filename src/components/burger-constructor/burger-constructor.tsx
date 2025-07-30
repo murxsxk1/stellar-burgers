@@ -26,7 +26,7 @@ export const BurgerConstructor: FC = () => {
     (state: RootState) => state.newOrder.order
   );
 
-  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const { isAuthenticated } = useSelector((state: RootState) => state.user);
 
   const onOrderClick = () => {
     if (!constructorItems?.bun || orderRequest) return;

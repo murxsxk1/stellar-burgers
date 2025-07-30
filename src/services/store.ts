@@ -10,7 +10,6 @@ import ingredientsReducer from './slices/ingredients';
 import feedsReducer from './slices/feeds';
 import ordersReducer from './slices/orders';
 import newOrderReducer from './slices/newOrder';
-import authReducer from './slices/auth';
 import userReducer from './slices/user';
 import passwordReducer from './slices/password';
 import constructorReducer from './slices/constructor';
@@ -20,7 +19,6 @@ const rootReducer = combineSlices({
   feeds: feedsReducer,
   orders: ordersReducer,
   newOrder: newOrderReducer,
-  auth: authReducer,
   user: userReducer,
   password: passwordReducer,
   burgerConstructor: constructorReducer
