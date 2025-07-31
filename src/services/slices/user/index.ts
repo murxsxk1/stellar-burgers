@@ -3,7 +3,10 @@ import {
   getUserApi,
   loginUserApi,
   logoutApi,
-  TLoginData
+  registerUserApi,
+  TLoginData,
+  TRegisterData,
+  updateUserApi
 } from '@api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
@@ -17,6 +20,10 @@ type TUserState = {
   data: TUser | null;
   loginUserError: string | null;
   loginUserRequest: boolean;
+  registerUserError: string | null;
+  registerUserRequest: boolean;
+  updateUserError: string | null;
+  updateUserRequest: boolean;
 };
 
 const initialState: TUserState = {
@@ -24,8 +31,29 @@ const initialState: TUserState = {
   isAuthenticated: false,
   data: null,
   loginUserError: null,
-  loginUserRequest: false
+  loginUserRequest: false,
+  registerUserError: null,
+  registerUserRequest: false,
+  updateUserError: null,
+  updateUserRequest: false
 };
+
+export const registerUser = createAsyncThunk(
+  'user/registerUser',
+  async (data: TRegisterData, { rejectWithValue }) => {
+    try {
+      const response = await registerUserApi(data);
+      if (!response.success) {
+        return rejectWithValue(response);
+      }
+      setCookie('accessToken', response.accessToken);
+      localStorage.setItem('refreshToken', response.refreshToken);
+      return response;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
 
 export const loginUser = createAsyncThunk(
   'user/loginUser',
@@ -37,6 +65,21 @@ export const loginUser = createAsyncThunk(
       }
       setCookie('accessToken', response.accessToken);
       localStorage.setItem('refreshToken', response.refreshToken);
+      return response;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
+export const updateUser = createAsyncThunk(
+  'user/updateUser',
+  async (data: Partial<TRegisterData>, { rejectWithValue }) => {
+    try {
+      const response = await updateUserApi(data);
+      if (!response.success) {
+        return rejectWithValue(response);
+      }
       return response;
     } catch (error) {
       return rejectWithValue(error);
@@ -98,10 +141,43 @@ export const userSlice = createSlice({
     userLogout: (state) => {
       state.data = null;
       state.isAuthenticated = false;
+    },
+    clearRegisterError: (state) => {
+      state.registerUserError = null;
+    },
+    clearLoginError: (state) => {
+      state.loginUserError = null;
+    },
+    clearUpdateError: (state) => {
+      state.updateUserError = null;
     }
   },
   extraReducers: (builder) => {
     builder
+
+      .addCase(registerUser.pending, (state) => {
+        state.registerUserRequest = true;
+        state.registerUserError = null;
+      })
+      .addCase(registerUser.fulfilled, (state, action) => {
+        state.data = action.payload.user;
+        state.registerUserRequest = false;
+        state.isAuthenticated = true;
+        state.isAuthChecked = true;
+      })
+      .addCase(registerUser.rejected, (state, action) => {
+        state.registerUserRequest = false;
+
+        if (typeof action.payload === 'object' && action.payload !== null) {
+          const err = action.payload as { message?: string };
+          state.registerUserError = err.message || 'Ошибка регистрации';
+        } else {
+          state.registerUserError = 'Ошибка регистрации';
+        }
+
+        state.isAuthChecked = true;
+      })
+
       .addCase(loginUser.pending, (state) => {
         state.loginUserRequest = true;
         state.loginUserError = null;
@@ -114,9 +190,36 @@ export const userSlice = createSlice({
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loginUserRequest = false;
-        state.loginUserError = action.payload as string;
+
+        if (typeof action.payload === 'object' && action.payload !== null) {
+          const err = action.payload as { message?: string };
+          state.loginUserError = err.message || 'Ошибка входа';
+        } else {
+          state.loginUserError = 'Ошибка входа';
+        }
+
         state.isAuthChecked = true;
       })
+
+      .addCase(updateUser.pending, (state) => {
+        state.updateUserRequest = true;
+        state.updateUserError = null;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.data = action.payload.user;
+        state.updateUserRequest = false;
+      })
+      .addCase(updateUser.rejected, (state, action) => {
+        state.updateUserRequest = false;
+
+        if (typeof action.payload === 'object' && action.payload !== null) {
+          const err = action.payload as { message?: string };
+          state.updateUserError = err.message || 'Ошибка обновления данных';
+        } else {
+          state.updateUserError = 'Ошибка обновления данных';
+        }
+      })
+
       .addCase(getUser.fulfilled, (state, action) => {
         state.data = action.payload.user;
         state.isAuthenticated = true;
@@ -142,6 +245,20 @@ export const loginUserRequestSelector = (state: RootState) =>
   state.user.loginUserRequest;
 export const loginUserErrorSelector = (state: RootState) =>
   state.user.loginUserError;
+export const registerUserRequestSelector = (state: RootState) =>
+  state.user.registerUserRequest;
+export const registerUserErrorSelector = (state: RootState) =>
+  state.user.registerUserError;
+export const updateUserRequestSelector = (state: RootState) =>
+  state.user.updateUserRequest;
+export const updateUserErrorSelector = (state: RootState) =>
+  state.user.updateUserError;
 
-export const { authChecked, userLogout } = userSlice.actions;
+export const {
+  authChecked,
+  userLogout,
+  clearRegisterError,
+  clearLoginError,
+  clearUpdateError
+} = userSlice.actions;
 export default userSlice.reducer;
