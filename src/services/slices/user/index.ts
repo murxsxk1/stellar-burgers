@@ -1,5 +1,4 @@
 import {
-  fetchWithRefresh,
   getUserApi,
   loginUserApi,
   logoutApi,

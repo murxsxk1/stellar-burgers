@@ -25,6 +25,8 @@ const App = () => {
   const location = useLocation();
   const background = location.state?.background;
   const dispatch = useDispatch();
+  const feedTitle = `#${location.pathname.split('/')[2]}`;
+  const historyFeedTitle = `#${location.pathname.split('/')[3]}`;
 
   useEffect(() => {
     dispatch(fetchIngredients());
@@ -109,7 +111,7 @@ const App = () => {
           <Route
             path='/feed/:number'
             element={
-              <Modal title='Номер в ленте заказа' onClose={handleModalClose}>
+              <Modal title={feedTitle} onClose={handleModalClose}>
                 <OrderInfo />
               </Modal>
             }
@@ -117,7 +119,7 @@ const App = () => {
           <Route
             path='/ingredients/:id'
             element={
-              <Modal title='Номер ингредиента' onClose={handleModalClose}>
+              <Modal title='Детали ингредиента' onClose={handleModalClose}>
                 <IngredientDetails />
               </Modal>
             }
@@ -125,7 +127,7 @@ const App = () => {
           <Route
             path='/profile/orders/:number'
             element={
-              <Modal title='Номер заказа' onClose={handleModalClose}>
+              <Modal title={historyFeedTitle} onClose={handleModalClose}>
                 <OrderInfo />
               </Modal>
             }
