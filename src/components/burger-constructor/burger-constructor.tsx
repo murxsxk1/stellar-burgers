@@ -1,9 +1,8 @@
 import { FC, useMemo } from 'react';
 import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
-import { RootState, useDispatch } from '../../services/store';
+import { RootState, useDispatch, useSelector } from '../../services/store';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import { clearConstructor } from '../../services/slices/constructor';
 import { createOrder, clearOrder } from '../../services/slices/newOrder';
 
