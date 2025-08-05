@@ -9,11 +9,14 @@ import { ProfileMenu } from '@components';
 
 export const ProfileUI: FC<ProfileUIProps> = ({
   formValue,
+  passwordDisplayValue,
   isFormChanged,
+  editMode,
   updateUserError,
   handleSubmit,
   handleCancel,
-  handleInputChange
+  handleInputChange,
+  handleEditToggle
 }) => (
   <main className={`${commonStyles.container}`}>
     <div className={`mt-30 mr-15 ${styles.menu}`}>
@@ -34,7 +37,9 @@ export const ProfileUI: FC<ProfileUIProps> = ({
             error={false}
             errorText={''}
             size={'default'}
-            icon={'EditIcon'}
+            icon={editMode.name ? 'CloseIcon' : 'EditIcon'}
+            onIconClick={() => handleEditToggle('name')}
+            disabled={!editMode.name}
           />
         </div>
         <div className='pb-6'>
@@ -47,7 +52,9 @@ export const ProfileUI: FC<ProfileUIProps> = ({
             error={false}
             errorText={''}
             size={'default'}
-            icon={'EditIcon'}
+            icon={editMode.email ? 'CloseIcon' : 'EditIcon'}
+            onIconClick={() => handleEditToggle('email')}
+            disabled={!editMode.email}
           />
         </div>
         <div className='pb-6'>
@@ -55,12 +62,14 @@ export const ProfileUI: FC<ProfileUIProps> = ({
             type={'password'}
             placeholder={'Пароль'}
             onChange={handleInputChange}
-            value={formValue.password}
+            value={passwordDisplayValue}
             name={'password'}
             error={false}
             errorText={''}
             size={'default'}
-            icon={'EditIcon'}
+            icon={editMode.password ? 'CloseIcon' : 'EditIcon'}
+            onIconClick={() => handleEditToggle('password')}
+            disabled={!editMode.password}
           />
         </div>
         {isFormChanged && (

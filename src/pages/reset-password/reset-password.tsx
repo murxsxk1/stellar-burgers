@@ -9,16 +9,31 @@ export const ResetPassword: FC = () => {
   const [password, setPassword] = useState('');
   const [token, setToken] = useState('');
   const [error, setError] = useState<Error | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
+
+    if (!password.trim() || !token.trim()) {
+      setError(new Error('Заполните все поля'));
+      return;
+    }
+
     setError(null);
+    setIsLoading(true);
+
     resetPasswordApi({ password, token })
       .then(() => {
         localStorage.removeItem('resetPassword');
         navigate('/login');
       })
-      .catch((err) => setError(err));
+      .catch((err) => {
+        console.error('Ошибка сброса пароля:', err);
+        setError(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   useEffect(() => {
@@ -29,7 +44,7 @@ export const ResetPassword: FC = () => {
 
   return (
     <ResetPasswordUI
-      errorText={error?.message}
+      errorText={error?.message || ''}
       password={password}
       token={token}
       setPassword={setPassword}
