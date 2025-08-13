@@ -14,7 +14,7 @@ import userReducer from './slices/user';
 import passwordReducer from './slices/password';
 import constructorReducer from './slices/constructor';
 
-const rootReducer = combineSlices({
+export const rootReducer = combineSlices({
   ingredients: ingredientsReducer,
   feeds: feedsReducer,
   orders: ordersReducer,
@@ -24,7 +24,7 @@ const rootReducer = combineSlices({
   burgerConstructor: constructorReducer
 });
 
-const store = configureStore({
+export const store = configureStore({
   reducer: rootReducer,
   devTools: process.env.NODE_ENV !== 'production'
 });
