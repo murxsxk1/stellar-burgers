@@ -1,6 +1,10 @@
-import reducer, { addIngredient, moveIngredient, removeIngredient } from '../constructor';
+import reducer, {
+  addIngredient,
+  moveIngredient,
+  removeIngredient
+} from '../constructor';
 
-describe('Тесты, проверяющие работу конструктора бургера', () => {
+describe('Тесты, проверяющие работу constructor', () => {
   const initialState = {
     constructorItems: {
       bun: null,

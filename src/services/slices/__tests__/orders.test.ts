@@ -24,6 +24,7 @@ describe('ordersSlice', () => {
     number: 86256
   };
 
+  // === fetchOrders ===
   test('Проверка pending состояния fetchOrders', () => {
     const state = reducer(initialState, { type: fetchOrders.pending.type });
     expect(state.loading).toBe(true);
@@ -40,7 +41,7 @@ describe('ordersSlice', () => {
   });
 
   test('Проверка rejected состояния fetchOrders', () => {
-    const errorMessage = 'Ошибка сети';
+    const errorMessage = 'Ошибка загрузки';
     const state = reducer(initialState, {
       type: fetchOrders.rejected.type,
       error: { message: errorMessage },
@@ -49,6 +50,7 @@ describe('ordersSlice', () => {
     expect(state.error).toBe(errorMessage);
   });
 
+  // === fetchOrderByNumber ===
   test('Проверка pending состояния fetchOrderByNumber', () => {
     const state = reducer(initialState, { type: fetchOrderByNumber.pending.type });
     expect(state.loading).toBe(true);
@@ -67,10 +69,10 @@ describe('ordersSlice', () => {
   test('Проверка rejected состояния fetchOrderByNumber', () => {
     const state = reducer(initialState, {
       type: fetchOrderByNumber.rejected.type,
-      error: { message: 'Не найден заказ' },
+      error: { message: 'Ошибка загрузки заказа' },
     });
     expect(state.loading).toBe(false);
-    expect(state.error).toBe('Не найден заказ');
+    expect(state.error).toBe('Ошибка загрузки заказа');
   });
 
   test('Проверка clearCurrentOrder', () => {

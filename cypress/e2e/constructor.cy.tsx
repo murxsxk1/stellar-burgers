@@ -105,5 +105,13 @@ describe('Перехват запроса на эндпоинт с ингред�
       cy.contains('div', 'Выберите булки');
       cy.contains('div', 'Выберите начинку');
     });
+
+    // Очищаются токены после завершения теста
+    afterEach(() => {
+      cy.window().then((win) => {
+        win.localStorage.removeItem('accessToken');
+      });
+      cy.clearCookie('accessToken');
+    });
   });
 });

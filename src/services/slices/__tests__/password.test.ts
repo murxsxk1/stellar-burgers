@@ -8,6 +8,7 @@ describe('Тесты, проверяющие работу passwordSlice', () => 
     isPasswordReset: false,
   };
 
+  // === forgotPassword ===
   test('Проверка pending состояния forgotPassword', () => {
     const state = reducer(initialState, { type: forgotPassword.pending.type });
     expect(state.loading).toBe(true);
@@ -21,7 +22,7 @@ describe('Тесты, проверяющие работу passwordSlice', () => 
   });
 
   test('Проверка rejected состояния forgotPassword', () => {
-    const errorMessage = 'Email не найден';
+    const errorMessage = 'Ошибка отправки email для сброса пароля';
     const state = reducer(initialState, {
       type: forgotPassword.rejected.type,
       error: { message: errorMessage },
@@ -30,6 +31,7 @@ describe('Тесты, проверяющие работу passwordSlice', () => 
     expect(state.error).toBe(errorMessage);
   });
 
+  // === resetPassword ===
   test('Проверка pending состояния resetPassword', () => {
     const state = reducer(initialState, { type: resetPassword.pending.type });
     expect(state.loading).toBe(true);
@@ -43,7 +45,7 @@ describe('Тесты, проверяющие работу passwordSlice', () => 
   });
 
   test('Проверка rejected состояния resetPassword', () => {
-    const errorMessage = 'Неверный токен';
+    const errorMessage = 'Ошибка сброса пароля';
     const state = reducer(initialState, {
       type: resetPassword.rejected.type,
       error: { message: errorMessage },

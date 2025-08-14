@@ -75,9 +75,9 @@ describe('Тесты, проверяющие работу экстра редю�
   });
 
   it('Проверка rejected состояния registerUser', () => {
-    const payload = { message: 'Ошибка' };
+    const payload = { message: 'Ошибка регистрации' };
     const nextState = userSlice.reducer(initialState, { type: registerUser.rejected.type, payload });
-    expect(nextState.registerUserError).toBe('Ошибка');
+    expect(nextState.registerUserError).toBe('Ошибка регистрации');
     expect(nextState.isAuthChecked).toBe(true);
     expect(nextState.registerUserRequest).toBe(false);
   });
@@ -99,9 +99,9 @@ describe('Тесты, проверяющие работу экстра редю�
   });
 
   it('Проверка rejected состояния loginUser', () => {
-    const payload = { message: 'Ошибка' };
+    const payload = { message: 'Ошибка входа' };
     const nextState = userSlice.reducer(initialState, { type: loginUser.rejected.type, payload });
-    expect(nextState.loginUserError).toBe('Ошибка');
+    expect(nextState.loginUserError).toBe('Ошибка входа');
     expect(nextState.isAuthChecked).toBe(true);
     expect(nextState.loginUserRequest).toBe(false);
   });
