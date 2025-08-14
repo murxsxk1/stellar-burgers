@@ -1,14 +1,10 @@
-import reducer, { fetchIngredients } from '../ingredients';
+import reducer, { fetchIngredients, initialState } from '../ingredients';
 
 describe('Тесты, проверяющие работу ingredients', () => {
-  const initialState = {
-    ingredients: [],
-    loading: false,
-    error: null
-  };
-
   test('Проверка pending состояния', () => {
-    const state = reducer(initialState, { type: fetchIngredients.pending.type });
+    const state = reducer(initialState, {
+      type: fetchIngredients.pending.type
+    });
     expect(state.loading).toBe(true);
     expect(state.error).toBeNull();
   });
@@ -25,7 +21,8 @@ describe('Тесты, проверяющие работу ingredients', () => {
         calories: 4242,
         price: 424,
         image: 'https://code.s3.yandex.net/react/code/meat-01.png',
-        image_mobile: 'https://code.s3.yandex.net/react/code/meat-01-mobile.png',
+        image_mobile:
+          'https://code.s3.yandex.net/react/code/meat-01-mobile.png',
         image_large: 'https://code.s3.yandex.net/react/code/meat-01-large.png',
         __v: 0
       }

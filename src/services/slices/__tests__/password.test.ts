@@ -1,13 +1,11 @@
-import reducer, { forgotPassword, resetPassword, clearPasswordState } from '../password';
+import reducer, {
+  forgotPassword,
+  resetPassword,
+  clearPasswordState,
+  initialState
+} from '../password';
 
 describe('Тесты, проверяющие работу passwordSlice', () => {
-  const initialState = {
-    loading: false,
-    error: null,
-    isResetEmailSent: false,
-    isPasswordReset: false,
-  };
-
   // === forgotPassword ===
   test('Проверка pending состояния forgotPassword', () => {
     const state = reducer(initialState, { type: forgotPassword.pending.type });
@@ -16,7 +14,9 @@ describe('Тесты, проверяющие работу passwordSlice', () => 
   });
 
   test('Проверка fulfilled состояния forgotPassword', () => {
-    const state = reducer(initialState, { type: forgotPassword.fulfilled.type });
+    const state = reducer(initialState, {
+      type: forgotPassword.fulfilled.type
+    });
     expect(state.loading).toBe(false);
     expect(state.isResetEmailSent).toBe(true);
   });
@@ -25,7 +25,7 @@ describe('Тесты, проверяющие работу passwordSlice', () => 
     const errorMessage = 'Ошибка отправки email для сброса пароля';
     const state = reducer(initialState, {
       type: forgotPassword.rejected.type,
-      error: { message: errorMessage },
+      error: { message: errorMessage }
     });
     expect(state.loading).toBe(false);
     expect(state.error).toBe(errorMessage);
@@ -48,7 +48,7 @@ describe('Тесты, проверяющие работу passwordSlice', () => 
     const errorMessage = 'Ошибка сброса пароля';
     const state = reducer(initialState, {
       type: resetPassword.rejected.type,
-      error: { message: errorMessage },
+      error: { message: errorMessage }
     });
     expect(state.loading).toBe(false);
     expect(state.error).toBe(errorMessage);
@@ -59,7 +59,7 @@ describe('Тесты, проверяющие работу passwordSlice', () => 
       loading: false,
       error: 'Ошибка',
       isResetEmailSent: true,
-      isPasswordReset: true,
+      isPasswordReset: true
     };
     const state = reducer(filledState, clearPasswordState());
     expect(state.error).toBeNull();

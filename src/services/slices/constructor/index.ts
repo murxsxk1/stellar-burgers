@@ -9,7 +9,7 @@ interface IConstructorState {
   };
 }
 
-const initialState: IConstructorState = {
+export const initialState: IConstructorState = {
   constructorItems: {
     bun: null,
     ingredients: []

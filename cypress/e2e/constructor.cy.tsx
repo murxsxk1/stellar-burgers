@@ -1,66 +1,58 @@
+import { INGREDIENTS, SELECTORS } from '../support/constants';
+
 describe('Перехват запроса на эндпоинт с ингредиентами', () => {
   beforeEach(() => {
     cy.intercept('GET', '**/ingredients', { fixture: 'ingredients' }).as(
       'getIngredients'
     );
-    cy.visit('http://localhost:4000');
+    cy.visit('/');
     cy.wait('@getIngredients');
   });
 
   describe('Добавление ингредиента из списка в конструктор', () => {
     it('Добавление одного ингредиента', () => {
-      cy.contains('li', 'Биокотлета из марсианской Магнолии')
-        .find('button')
-        .click();
-      cy.contains('span', 'Биокотлета из марсианской Магнолии').should('exist');
+      cy.contains('li', INGREDIENTS.MAIN_INGREDIENT).find('button').click();
+      cy.contains('span', INGREDIENTS.MAIN_INGREDIENT).should('exist');
     });
 
     it('Добавление двух ингредиентов', () => {
-      cy.contains('li', 'Биокотлета из марсианской Магнолии')
+      cy.contains('li', INGREDIENTS.MAIN_INGREDIENT).find('button').click();
+      cy.contains('li', INGREDIENTS.ADDITIONAL_INGREDIENT)
         .find('button')
         .click();
-      cy.contains('li', 'Филе Люминесцентного тетраодонтимформа')
-        .find('button')
-        .click();
-      cy.contains('span', 'Биокотлета из марсианской Магнолии').should('exist');
-      cy.contains('span', 'Филе Люминесцентного тетраодонтимформа').should(
-        'exist'
-      );
+      cy.contains('span', INGREDIENTS.MAIN_INGREDIENT).should('exist');
+      cy.contains('span', INGREDIENTS.ADDITIONAL_INGREDIENT).should('exist');
     });
 
     it('Добавление двух ингредиентов и булок', () => {
-      cy.contains('li', 'Краторная булка N-200i').find('button').click();
-      cy.contains('li', 'Биокотлета из марсианской Магнолии')
+      cy.contains('li', INGREDIENTS.MAIN_BUN).find('button').click();
+      cy.contains('li', INGREDIENTS.MAIN_INGREDIENT).find('button').click();
+      cy.contains('li', INGREDIENTS.ADDITIONAL_INGREDIENT)
         .find('button')
         .click();
-      cy.contains('li', 'Филе Люминесцентного тетраодонтимформа')
-        .find('button')
-        .click();
-      cy.contains('span', 'Краторная булка N-200i').should('exist');
-      cy.contains('span', 'Биокотлета из марсианской Магнолии').should('exist');
-      cy.contains('span', 'Филе Люминесцентного тетраодонтимформа').should(
-        'exist'
-      );
+      cy.contains('span', INGREDIENTS.MAIN_BUN).should('exist');
+      cy.contains('span', INGREDIENTS.MAIN_INGREDIENT).should('exist');
+      cy.contains('span', INGREDIENTS.ADDITIONAL_INGREDIENT).should('exist');
     });
   });
 
   describe('Работа модальных окон', () => {
     it('Открытие модального окна ингредиента', () => {
-      cy.contains('li', 'Краторная булка N-200i').click();
+      cy.contains('li', INGREDIENTS.MAIN_BUN).click();
       cy.wait(300);
-      cy.get('[data-cy="modal"]').should('be.visible');
+      cy.get(SELECTORS.MODAL).should('be.visible');
     });
 
     it('Закрытие по клику на крестик', () => {
-      cy.contains('li', 'Краторная булка N-200i').click();
+      cy.contains('li', INGREDIENTS.MAIN_BUN).click();
       cy.wait(300);
-      cy.get('[data-cy="buttonClose"]').click().should('not.exist');
+      cy.get(SELECTORS.MODAL_CLOSE_BUTTON).click().should('not.exist');
     });
 
     it('Закрытие по клику на оверлей', () => {
-      cy.contains('li', 'Краторная булка N-200i').click();
+      cy.contains('li', INGREDIENTS.MAIN_BUN).click();
       cy.wait(300);
-      cy.get('[data-cy="modalOverlay"]')
+      cy.get(SELECTORS.MODAL_OVERLAY)
         .click({ force: true })
         .should('not.exist');
     });
@@ -72,7 +64,7 @@ describe('Перехват запроса на эндпоинт с ингред�
       cy.intercept('POST', '**api/orders', { fixture: 'orders' }).as(
         'createOrder'
       );
-      cy.visit('http://localhost:4000');
+      cy.visit('/');
       cy.setCookie('accessToken', 'testToken');
       cy.window().then((win) => {
         win.localStorage.setItem('accessToken', 'testToken');
@@ -81,11 +73,9 @@ describe('Перехват запроса на эндпоинт с ингред�
 
     it('Все этапы создания заказа', () => {
       // Собирается бургер.
-      cy.contains('li', 'Краторная булка N-200i').find('button').click();
+      cy.contains('li', INGREDIENTS.MAIN_BUN).find('button').click();
       cy.contains('span', 'Начинки').click();
-      cy.contains('li', 'Биокотлета из марсианской Магнолии')
-        .find('button')
-        .click();
+      cy.contains('li', INGREDIENTS.MAIN_INGREDIENT).find('button').click();
 
       // Вызывается клик по кнопке «Оформить заказ».
       cy.contains('button', 'Оформить заказ').click();
@@ -93,13 +83,13 @@ describe('Перехват запроса на эндпоинт с ингред�
 
       // Проверяется, что модальное окно открылось и номер заказа верный.
       cy.wait(300);
-      cy.get('[data-cy="modal"]').should('be.visible');
-      cy.get('[data-cy="orderNumber"]').should('exist');
+      cy.get(SELECTORS.MODAL).should('be.visible');
+      cy.get(SELECTORS.ORDER_NUMBER).should('exist');
 
       // Закрывается модальное окно и проверяется успешность закрытия.
-      cy.get('[data-cy="buttonClose"]').click();
-      cy.get('[data-cy="modal"]').should('not.exist');
-      cy.get('[data-cy="orderNumber"]').should('not.exist');
+      cy.get(SELECTORS.MODAL_CLOSE_BUTTON).click();
+      cy.get(SELECTORS.MODAL).should('not.exist');
+      cy.get(SELECTORS.ORDER_NUMBER).should('not.exist');
 
       // Проверяется, что конструктор пуст.
       cy.contains('div', 'Выберите булки');

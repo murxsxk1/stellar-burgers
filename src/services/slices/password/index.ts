@@ -9,7 +9,7 @@ interface IPasswordState {
   isPasswordReset: boolean;
 }
 
-const initialState: IPasswordState = {
+export const initialState: IPasswordState = {
   loading: false,
   error: null,
   isResetEmailSent: false,

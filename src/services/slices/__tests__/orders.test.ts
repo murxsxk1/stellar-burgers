@@ -1,14 +1,7 @@
-import reducer, { fetchOrders, fetchOrderByNumber, clearCurrentOrder } from '../orders';
+import reducer, { fetchOrders, fetchOrderByNumber, clearCurrentOrder, initialState } from '../orders';
 import { TOrder } from '@utils-types';
 
 describe('ordersSlice', () => {
-  const initialState = {
-    orders: [],
-    currentOrder: null,
-    loading: false,
-    error: null,
-  };
-
   const realOrder: TOrder = {
     _id: "689ae636673086001ba8262d",
     ingredients: [

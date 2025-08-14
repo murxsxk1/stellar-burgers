@@ -1,14 +1,6 @@
-import reducer, { fetchFeeds } from '../feeds';
+import reducer, { fetchFeeds, initialState } from '../feeds';
 
 describe('Тесты, проверяющие работу feeds', () => {
-  const initialState = {
-    orders: [],
-    total: 0,
-    totalToday: 0,
-    loading: false,
-    error: null
-  };
-
   test('Проверка pending состояния', () => {
     const state = reducer(initialState, { type: fetchFeeds.pending.type });
     expect(state.loading).toBe(true);

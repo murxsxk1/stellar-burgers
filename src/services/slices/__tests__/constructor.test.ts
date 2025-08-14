@@ -1,17 +1,11 @@
 import reducer, {
   addIngredient,
+  initialState,
   moveIngredient,
   removeIngredient
 } from '../constructor';
 
 describe('Тесты, проверяющие работу constructor', () => {
-  const initialState = {
-    constructorItems: {
-      bun: null,
-      ingredients: []
-    }
-  };
-
   const ingredient1 = {
     _id: '643d69a5c3f7b9001cfa0941',
     name: 'Биокотлета из марсианской Магнолии',
