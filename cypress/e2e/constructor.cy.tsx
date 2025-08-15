@@ -2,7 +2,7 @@ import { INGREDIENTS, SELECTORS } from '../support/constants';
 
 describe('Перехват запроса на эндпоинт с ингредиентами', () => {
   beforeEach(() => {
-    cy.intercept('GET', '**/ingredients', { fixture: 'ingredients' }).as(
+    cy.intercept('GET', 'api/ingredients', { fixture: 'ingredients' }).as(
       'getIngredients'
     );
     cy.visit('/');
@@ -60,15 +60,15 @@ describe('Перехват запроса на эндпоинт с ингред�
 
   describe('Создание заказа', () => {
     beforeEach(() => {
-      cy.intercept('GET', '**api/auth/user', { fixture: 'user' }).as('getUser');
-      cy.intercept('POST', '**api/orders', { fixture: 'orders' }).as(
+      cy.setCookie('accessToken', 'testToken');
+      window.localStorage.setItem('accessToken', 'testToken');
+
+      cy.intercept('GET', 'api/auth/user', { fixture: 'user' }).as('getUser');
+      cy.intercept('POST', 'api/orders', { fixture: 'orders' }).as(
         'createOrder'
       );
+
       cy.visit('/');
-      cy.setCookie('accessToken', 'testToken');
-      cy.window().then((win) => {
-        win.localStorage.setItem('accessToken', 'testToken');
-      });
     });
 
     it('Все этапы создания заказа', () => {
@@ -98,9 +98,7 @@ describe('Перехват запроса на эндпоинт с ингред�
 
     // Очищаются токены после завершения теста
     afterEach(() => {
-      cy.window().then((win) => {
-        win.localStorage.removeItem('accessToken');
-      });
+      window.localStorage.removeItem('accessToken');
       cy.clearCookie('accessToken');
     });
   });
